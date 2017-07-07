@@ -17,11 +17,11 @@ import java.util.Collection;
 public class DOMParserDemo {
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
         DomParser domParser = new DomParser();
-        Collection<Student> students = domParser.parsing();
+        Collection<Employee> employees = domParser.parsing();
 
-        for(Student s : students)
+        for(Employee e : employees)
         {
-            System.out.println(s);
+            System.out.println(e);
         }
 
     }
@@ -29,20 +29,20 @@ public class DOMParserDemo {
 }
 
 class DomParser {
-    Collection<Student> students = new ArrayList<>();
-    Student student;
+    Collection<Employee> employees = new ArrayList<>();
+    Employee employee;
     String content;
-    Collection<Student> parsing() throws ParserConfigurationException, IOException, SAXException {
+    Collection<Employee> parsing() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse("src/main/student.xml");
+        Document document = documentBuilder.parse("src/main/employee.xml");
         document.getDocumentElement().normalize();
-        NodeList nodeList = document.getElementsByTagName("student");
+        NodeList nodeList = document.getElementsByTagName("employee");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            student = new Student();
+            employee = new Employee();
             if (node instanceof Element) {
-                student.setRollNo(Integer.parseInt(node.getAttributes().getNamedItem("rollNo").getNodeValue()));
+                employee.setId(Integer.parseInt(node.getAttributes().getNamedItem("id").getNodeValue()));
                 NodeList childNodes = node.getChildNodes();
                 for (int j = 0; j < childNodes.getLength(); j++) {
                     Node cNode = childNodes.item(j);
@@ -54,23 +54,14 @@ class DomParser {
                                 getTextContent().trim();
                         switch (cNode.getNodeName()) {
                             case "firstName":
-                                student.setFirstName(content);
+                                employee.setFirstName(content);
                                 break;
                             case "lastName":
-                                student.setLastName(content);
+                                employee.setLastName(content);
                                 break;
-                            case "subjects":
-                            {   NodeList sChildNodes = cNode.getChildNodes();
-
-                                for (int k = 0; k < sChildNodes.getLength(); k++) {
-                                Node scNode = sChildNodes.item(k);
-
-                                if (scNode instanceof Element)
-                                {
-                                    student.getSubjects().add(scNode.getLastChild().getTextContent().trim());
-                                }
-                                }
-
+                            case "designation":
+                            {
+                                employee.setDesignation(content);
                                 break;
                             }
                         }
@@ -78,8 +69,8 @@ class DomParser {
                 }
 
             }
-            students.add(student);
+            employees.add(employee);
         }
-        return students;
+        return employees;
     }
 }
