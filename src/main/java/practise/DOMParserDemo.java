@@ -1,4 +1,5 @@
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+package practise;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
